@@ -14,7 +14,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     config = load_config(args.settings)
-    ai = AiAssistant(config['openai_api_key'])
+    ai = AiAssistant(config['openapi_api_key'])
     robot = TonyPiController(config['serial_port'])
 
     print("TonyPi AI Demo - skriv en kommando til roboten!")
