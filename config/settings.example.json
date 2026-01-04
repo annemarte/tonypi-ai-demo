@@ -1,5 +1,5 @@
 {
-    "openapi_api_key": "xxxxx",
+    "openai_api_key": "xxxxx",
     "serial_port": "your_serial_port",
     "robot_speed": 1.0
 }
