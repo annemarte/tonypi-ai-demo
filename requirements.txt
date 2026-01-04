@@ -1,0 +1,6 @@
+openai
+pyserial
+pydantic
+numpy
+sounddevice
+scipy
