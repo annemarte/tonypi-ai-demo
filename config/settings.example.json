@@ -1,0 +1,5 @@
+{
+    "openapi_api_key": "your_open_api_key",
+    "serial_port": "your_serial_port",
+    "robot_speed": 1.0
+}
