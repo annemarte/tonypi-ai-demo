@@ -8,7 +8,7 @@ class AiAssistant:
         response = self.client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "Du er en robot-kontroller for TonyPi robot. Svar KUN med én enkel handling som: WALK_FORWARD, TURN_LEFT, TURN_RIGHT, WAVE, STOP, LOOK_AROUND. Ingen forklaringer."},
                 {"role": "user", "content": prompt}
             ]
         )
