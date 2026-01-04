@@ -1,4 +1,17 @@
 import time
+import sys
+from pathlib import Path
+
+# Add src folder to path for stubs
+src_path = Path(__file__).parent.parent
+if str(src_path) not in sys.path:
+    sys.path.insert(0, str(src_path))
+
+# Also add common TonyPi library paths
+tonypi_paths = ['/home/pi/TonyPi/Functions', '/home/pi/TonyPi']
+for p in tonypi_paths:
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
 try:
     # Real hardware (on TonyPi)
