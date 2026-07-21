@@ -1,4 +1,6 @@
+import random
 import sys
+import time
 
 _HIWONDER_SDK_PATHS = [
     "/home/pi/TonyPi/HiwonderSDK",
@@ -22,11 +24,27 @@ class TonyPiController:
         "stop": "stand",
     }
 
+    DANCE_ACTION_GROUPS = [
+        "dance_1",
+        "dance_2",
+        "dance_3",
+    ]
+
     def __init__(self, dry_run: bool = True):
         self.dry_run = dry_run
 
+    def execute_all(self, actions: list, pause_seconds: float = 1.0) -> None:
+        for action in actions:
+            self.execute(action)
+
+            if not self.dry_run:
+                time.sleep(pause_seconds)
+
     def execute(self, action: str) -> None:
-        action_group = self.ACTION_GROUPS.get(action)
+        if action == "dance":
+            action_group = random.choice(self.DANCE_ACTION_GROUPS)
+        else:
+            action_group = self.ACTION_GROUPS.get(action)
 
         if action_group is None:
             raise ValueError(f"Ikke tillatt robothandling: {action}")

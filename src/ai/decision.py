@@ -12,12 +12,15 @@ RobotAction = Literal[
     "turn_right",
     "walk_forward",
     "step_back",
+    "dance",
     "stop",
 ]
 
+MAX_ACTIONS = 3
+
 
 class Decision(BaseModel):
-    action: RobotAction
+    actions: list[RobotAction]
     reason: str
 
 
@@ -35,12 +38,17 @@ class DecisionMaker:
                     "content": (
                         "Du styrer en liten humanoid robot med en lekende, "
                         "nysgjerrig og litt frempå personlighet. "
-                        "Velg nøyaktig én tillatt handling. "
+                        "Tillatte handlinger er: "
+                        f"{', '.join(RobotAction.__args__)}. "
+                        f"Velg mellom én og {MAX_ACTIONS} tillatte handlinger, i den "
+                        "rekkefølgen de skal utføres. Du kan gjenta samme handling "
+                        "flere ganger i listen, f.eks. walk_forward, walk_forward, "
+                        "walk_forward for å gå tre skritt framover. "
                         "Sikkerhet prioriteres foran underholdning. "
                         "Velg aldri walk_forward dersom situasjonen beskriver "
                         "en hindring, ukjent terreng, en person svært nær roboten "
                         "eller utilstrekkelig informasjon. "
-                        "Ved usikkerhet skal du velge stop. "
+                        "Ved usikkerhet skal listen kun inneholde stop. "
                         "'reason' skal være maks én kort setning, skrevet med "
                         "robotens personlighet."
                     ),
@@ -60,5 +68,10 @@ class DecisionMaker:
 
         if decision is None:
             raise RuntimeError("AI returnerte ingen gyldig beslutning")
+
+        if not decision.actions:
+            raise RuntimeError("AI returnerte en tom handlingsliste")
+
+        decision.actions = decision.actions[:MAX_ACTIONS]
 
         return decision

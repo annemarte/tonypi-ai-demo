@@ -71,13 +71,13 @@ def run_once() -> None:
     print("\n3. Roboten forteller hva den ser ...")
     speaker.say(situation)
 
-    print("\n4. AI velger handling ...")
+    print("\n4. AI velger handling(er) ...")
     decision = decision_maker.choose_action(situation)
-    print(f"   Handling: {decision.action}")
+    print(f"   Handlinger: {', '.join(decision.actions)}")
     print(f"   Begrunnelse: {decision.reason}")
 
-    print("\n5. TonyPi utfører handling ...")
-    robot.execute(decision.action)
+    print("\n5. TonyPi utfører handling(er) ...")
+    robot.execute_all(decision.actions)
 
     print("\nFerdig.")
 

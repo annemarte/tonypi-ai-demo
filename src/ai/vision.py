@@ -33,7 +33,7 @@ class VisionAnalyzer:
                                 "med din egen personlighet i formuleringen. "
                                 "Nevn kort personer, hindringer eller objekter, og "
                                 "om det virker trygt å bevege seg fremover. "
-                                "Ikke velg en robothandling ennå. Vær kort og konsis."
+                                "Ikke velg en robothandling ennå. Vær veldig kort og konsis. Gjerne litt hipp og kul Bærum-slang."
                             ),
                         },
                         {
