@@ -7,14 +7,17 @@ from pydantic import BaseModel
 RobotAction = Literal[
     "stand",
     "wave",
-    "wink",
+    "bow",
     "turn_left",
     "turn_right",
     "walk_forward",
     "step_back",
     "dance",
     "stop",
-    "shrug",
+    "twist",
+    "chest",
+    "left_uppercut",
+    "stand_slow"
 ]
 
 MAX_ACTIONS = 3

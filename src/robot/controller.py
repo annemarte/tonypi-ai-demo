@@ -18,15 +18,16 @@ class TonyPiController:
     ACTION_GROUPS = {
         "stand": "stand",
         "wave": "wave",
-        "wink": "bow",
+        "bow": "bow",
         "turn_left": "turn_left",
         "turn_right": "turn_right",
         "walk_forward": "go_forward",
         "step_back": "back",
         "stop": "stand",
-        "shrug": "twist",
+        "twist": "twist",
         "16": "16",
         "left_uppercut": "left_uppercut",
+        "stand_slow": "stand_slow"
     }
 
     # Ingen egne "dance"-action groups finnes på roboten, så vi bruker
@@ -42,7 +43,7 @@ class TonyPiController:
         self.dry_run = dry_run
 
     def execute_all(self, actions: list, pause_seconds: float = 1.0) -> None:
-        for action in actions:
+        for action in list(actions) + ["stand_slow"]:
             self.execute(action)
 
             if not self.dry_run:
