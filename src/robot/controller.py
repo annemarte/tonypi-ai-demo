@@ -25,7 +25,6 @@ class TonyPiController:
         "step_back": "back",
         "stop": "stand",
         "twist": "twist",
-        "16": "16",
         "left_uppercut": "left_uppercut",
         "stand_slow": "stand_slow"
     }
@@ -36,7 +35,6 @@ class TonyPiController:
         "twist",
         "stepping",
         "wing_chun",
-        "16"
     ]
 
     def __init__(self, dry_run: bool = True):
