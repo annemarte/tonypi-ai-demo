@@ -13,23 +13,28 @@ for _sdk_path in _HIWONDER_SDK_PATHS:
 
 
 class TonyPiController:
+    # Alle verdier under er verifisert mot faktiske .d6a-filer i
+    # TonyPi/ActionGroups på selve roboten.
     ACTION_GROUPS = {
         "stand": "stand",
         "wave": "wave",
-        "wink": "wink",
+        "wink": "bow",
         "turn_left": "turn_left",
         "turn_right": "turn_right",
-        "left_kick": "left_kick",
         "walk_forward": "go_forward",
         "step_back": "back",
         "stop": "stand",
-        "twist": "twist",
+        "shrug": "twist",
+        "16": "16",
+        "left_uppercut": "left_uppercut",
     }
 
+    # Ingen egne "dance"-action groups finnes på roboten, så vi bruker
+    # eksisterende, dansevennlige bevegelser som varianter.
     DANCE_ACTION_GROUPS = [
-        "dance1",
-        "dance2",
-        "dance3",
+        "twist",
+        "stepping",
+        "wing_chun",
     ]
 
     def __init__(self, dry_run: bool = True):
