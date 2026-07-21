@@ -35,6 +35,7 @@ class TonyPiController:
         "twist",
         "stepping",
         "wing_chun",
+        "16"
     ]
 
     def __init__(self, dry_run: bool = True):
