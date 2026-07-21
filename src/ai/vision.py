@@ -27,10 +27,13 @@ class VisionAnalyzer:
                         {
                             "type": "input_text",
                             "text": (
-                                "Beskriv kort hva roboten ser. "
-                                "Nevn personer, hindringer, objekter og "
-                                "om området foran roboten virker trygt å bevege seg i. "
-                                "Ikke velg en robothandling ennå."
+                                "Du er en liten humanoid robot med en lekende, "
+                                "nysgjerrig og litt frempå personlighet. "
+                                "Beskriv i maks 1-2 korte setninger hva du ser, "
+                                "med din egen personlighet i formuleringen. "
+                                "Nevn kort personer, hindringer eller objekter, og "
+                                "om det virker trygt å bevege seg fremover. "
+                                "Ikke velg en robothandling ennå. Vær kort og konsis."
                             ),
                         },
                         {
