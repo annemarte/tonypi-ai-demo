@@ -1,0 +1,61 @@
+from typing import Literal
+
+from openai import OpenAI
+from pydantic import BaseModel
+
+
+RobotAction = Literal[
+    "stand",
+    "wave",
+    "wink",
+    "turn_left",
+    "turn_right",
+    "walk_forward",
+    "step_back",
+    "stop",
+]
+
+
+class Decision(BaseModel):
+    action: RobotAction
+    reason: str
+
+
+class DecisionMaker:
+    def __init__(self, api_key: str, model: str):
+        self.client = OpenAI(api_key=api_key)
+        self.model = model
+
+    def choose_action(self, situation: str) -> Decision:
+        response = self.client.responses.parse(
+            model=self.model,
+            input=[
+                {
+                    "role": "system",
+                    "content": (
+                        "Du styrer en liten humanoid robot. "
+                        "Velg nøyaktig én tillatt handling. "
+                        "Sikkerhet prioriteres foran underholdning. "
+                        "Velg aldri walk_forward dersom situasjonen beskriver "
+                        "en hindring, ukjent terreng, en person svært nær roboten "
+                        "eller utilstrekkelig informasjon. "
+                        "Ved usikkerhet skal du velge stop."
+                    ),
+                },
+                {
+                    "role": "user",
+                    "content": (
+                        "Situasjonsbeskrivelse fra robotens kamera:\n\n"
+                        f"{situation}"
+                    ),
+                },
+            ],
+            text_format=Decision,
+        )
+
+        decision = response.output_parsed
+
+        if decision is None:
+            raise RuntimeError("AI returnerte ingen gyldig beslutning")
+
+        return decision
