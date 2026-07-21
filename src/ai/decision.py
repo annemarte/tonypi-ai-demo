@@ -14,6 +14,7 @@ RobotAction = Literal[
     "step_back",
     "dance",
     "stop",
+    "shrug",
 ]
 
 MAX_ACTIONS = 3
@@ -48,7 +49,10 @@ class DecisionMaker:
                         "Velg aldri walk_forward dersom situasjonen beskriver "
                         "en hindring, ukjent terreng, en person svært nær roboten "
                         "eller utilstrekkelig informasjon. "
-                        "Ved usikkerhet skal listen kun inneholde stop. "
+                        "Ved usikkerhet skal listen inneholde stop, og bør "
+                        "også inkludere shrug (rist på hodet / trekk på "
+                        "skuldrene) for å vise at roboten er usikker, f.eks. "
+                        "stop, shrug. "
                         "'reason' skal være maks én kort setning, skrevet med "
                         "robotens personlighet."
                     ),

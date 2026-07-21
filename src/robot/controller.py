@@ -22,6 +22,7 @@ class TonyPiController:
         "walk_forward": "go_forward",
         "step_back": "back",
         "stop": "stand",
+        "shrug": "shrug",
     }
 
     DANCE_ACTION_GROUPS = [
