@@ -1,4 +1,13 @@
-import hiwonder.ActionGroupControl as AGC
+import sys
+
+_HIWONDER_SDK_PATHS = [
+    "/home/pi/TonyPi/HiwonderSDK",
+    "/home/pi/TonyPi",
+]
+
+for _sdk_path in _HIWONDER_SDK_PATHS:
+    if _sdk_path not in sys.path:
+        sys.path.append(_sdk_path)
 
 
 class TonyPiController:
@@ -29,5 +38,14 @@ class TonyPiController:
 
         if self.dry_run:
             return
+
+        try:
+            import hiwonder.ActionGroupControl as AGC
+        except ModuleNotFoundError as error:
+            raise ModuleNotFoundError(
+                "Fant ikke 'hiwonder'-modulen. Denne modulen finnes kun på "
+                "selve TonyPi-roboten (Raspberry Pi) og må kjøres derfra, "
+                "eller kjør med dry_run=True for lokal testing."
+            ) from error
 
         AGC.runActionGroup(action_group)
