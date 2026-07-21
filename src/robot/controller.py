@@ -26,9 +26,9 @@ class TonyPiController:
     }
 
     DANCE_ACTION_GROUPS = [
-        "dance_1",
-        "dance_2",
-        "dance_3",
+        "dance1",
+        "dance2",
+        "dance3",
     ]
 
     def __init__(self, dry_run: bool = True):
