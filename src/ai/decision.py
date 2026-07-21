@@ -59,7 +59,7 @@ class DecisionMaker:
                         "Ved usikkerhet skal listen inneholde stop, og bør "
                         "også inkludere shrug (rist på hodet / trekk på "
                         "skuldrene) for å vise at roboten er usikker, f.eks. "
-                        "stop, shrug. "
+                        "stop, wink. "
                         "'reason' skal være maks én kort setning, skrevet med "
                         "robotens personlighet."
                     ),
