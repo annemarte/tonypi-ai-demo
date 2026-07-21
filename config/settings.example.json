@@ -1,5 +1,7 @@
 {
     "openai_api_key": "xxxxx",
     "serial_port": "your_serial_port",
+    "camera_index": 0,
+    "dry_run": true,
     "robot_speed": 1.0
 }
