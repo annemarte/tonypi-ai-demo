@@ -19,10 +19,11 @@ class TonyPiController:
         "wink": "wink",
         "turn_left": "turn_left",
         "turn_right": "turn_right",
+        "left_kick": "left_kick",
         "walk_forward": "go_forward",
         "step_back": "back",
         "stop": "stand",
-        "shrug": "shrug",
+        "twist": "twist",
     }
 
     DANCE_ACTION_GROUPS = [
