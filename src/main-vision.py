@@ -5,6 +5,7 @@ from pathlib import Path
 from ai.decision import DecisionMaker
 from ai.vision import VisionAnalyzer
 from robot.controller import TonyPiController
+from robot.speech import Speaker
 from vision.camera import Camera
 
 
@@ -50,6 +51,13 @@ def run_once() -> None:
         model=config["vision_model"],
     )
 
+    speaker = Speaker(
+        api_key=config["openai_api_key"],
+        model=config.get("tts_model", "gpt-4o-mini-tts"),
+        voice=config.get("tts_voice", "alloy"),
+        dry_run=config["dry_run"],
+    )
+
     robot = TonyPiController(dry_run=config["dry_run"])
 
     print("\n1. Tar bilde ...")
@@ -60,12 +68,15 @@ def run_once() -> None:
     situation = vision.describe(image_path)
     print(f"   Situasjon: {situation}")
 
-    print("\n3. AI velger handling ...")
+    print("\n3. Roboten forteller hva den ser ...")
+    speaker.say(situation)
+
+    print("\n4. AI velger handling ...")
     decision = decision_maker.choose_action(situation)
     print(f"   Handling: {decision.action}")
     print(f"   Begrunnelse: {decision.reason}")
 
-    print("\n4. TonyPi utfører handling ...")
+    print("\n5. TonyPi utfører handling ...")
     robot.execute(decision.action)
 
     print("\nFerdig.")
