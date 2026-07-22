@@ -18,6 +18,14 @@ class Speaker:
         self.voice = voice
         self.dry_run = dry_run
 
+    def play_file(self, audio_path: Path) -> None:
+        print(f"[ROBOT] spiller lydfil: {audio_path}")
+
+        if self.dry_run:
+            return
+
+        self._play_audio(audio_path)
+
     def say(self, text: str) -> None:
         text = text.strip()
 
