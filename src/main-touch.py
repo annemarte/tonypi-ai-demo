@@ -2,6 +2,7 @@ import importlib
 from pathlib import Path
 
 from robot.speech import Speaker
+from robot.temperature_sensor import read_temperature_humidity
 from robot.touch_sensor import TouchSensor
 
 main_vision = importlib.import_module("main-vision")
@@ -29,7 +30,14 @@ def main() -> None:
             speaker.play_file(TOUCH_SOUND_PATH)
 
             try:
-                main_vision.run_once()
+                temperature, humidity = read_temperature_humidity()
+                print(f"   Temperatur: {temperature:.1f} C, Fuktighet: {humidity:.1f} %")
+            except Exception as error:
+                print(f"\nKunne ikke lese temperatur/fuktighet: {error}")
+                temperature, humidity = None, None
+
+            try:
+                main_vision.run_once(temperature=temperature, humidity=humidity)
             except KeyboardInterrupt:
                 raise
             except Exception as error:

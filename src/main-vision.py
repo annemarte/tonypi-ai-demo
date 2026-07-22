@@ -36,7 +36,7 @@ def load_config() -> dict:
     return config
 
 
-def run_once() -> None:
+def run_once(temperature: float | None = None, humidity: float | None = None) -> None:
     config = load_config()
 
     camera = Camera(camera_index=config["camera_index"])
@@ -72,7 +72,7 @@ def run_once() -> None:
     speaker.say(situation)
 
     print("\n4. AI velger handling(er) ...")
-    decision = decision_maker.choose_action(situation)
+    decision = decision_maker.choose_action(situation, temperature=temperature, humidity=humidity)
     print(f"   Handlinger: {', '.join(decision.actions)}")
     print(f"   Begrunnelse: {decision.reason}")
 

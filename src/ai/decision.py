@@ -33,7 +33,24 @@ class DecisionMaker:
         self.client = OpenAI(api_key=api_key)
         self.model = model
 
-    def choose_action(self, situation: str) -> Decision:
+    def choose_action(
+        self,
+        situation: str,
+        temperature: float | None = None,
+        humidity: float | None = None,
+    ) -> Decision:
+        user_content = (
+            "Situasjonsbeskrivelse fra robotens kamera:\n\n"
+            f"{situation}"
+        )
+
+        if temperature is not None and humidity is not None:
+            user_content += (
+                "\n\nSensordata målt av roboten idet den ble berørt:\n"
+                f"Temperatur: {temperature:.1f} °C\n"
+                f"Fuktighet: {humidity:.1f} %"
+            )
+
         response = self.client.responses.parse(
             model=self.model,
             input=[
@@ -59,17 +76,16 @@ class DecisionMaker:
                         "Ved usikkerhet skal listen inneholde stop, og bør "
                         "også inkludere shrug (rist på hodet / trekk på "
                         "skuldrene) for å vise at roboten er usikker, f.eks. "
-                        "stop, wink. "
+                        "stop, wink. Hvis sensordata for temperatur og "
+                        "fuktighet er tilgjengelig, kan du gjerne kommentere "
+                        "dette i 'reason' på en lekende måte. "
                         "'reason' skal være maks én kort setning, skrevet med "
                         "robotens personlighet."
                     ),
                 },
                 {
                     "role": "user",
-                    "content": (
-                        "Situasjonsbeskrivelse fra robotens kamera:\n\n"
-                        f"{situation}"
-                    ),
+                    "content": user_content,
                 },
             ],
             text_format=Decision,
