@@ -65,20 +65,16 @@ def run_once(temperature: float | None = None, humidity: float | None = None) ->
     print(f"   Bilde lagret: {image_path}")
 
     print("\n2. AI beskriver situasjonen ...")
-    situation = vision.describe(image_path)
+    situation = vision.describe(image_path, temperature=temperature, humidity=humidity)
     print(f"   Situasjon: {situation}")
 
     print("\n3. Roboten forteller hva den ser ...")
     speaker.say(situation)
 
     print("\n4. AI velger handling(er) ...")
-    decision = decision_maker.choose_action(situation, temperature=temperature, humidity=humidity)
+    decision = decision_maker.choose_action(situation)
     print(f"   Handlinger: {', '.join(decision.actions)}")
     print(f"   Begrunnelse: {decision.reason}")
-    print(f"   Roboten sier: {decision.speech}")
-
-    print("\n4b. Roboten sier hva den tenker ...")
-    speaker.say(decision.speech)
 
     print("\n5. TonyPi utfører handling(er) ...")
     robot.execute_all(decision.actions)

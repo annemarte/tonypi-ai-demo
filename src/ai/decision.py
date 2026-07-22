@@ -26,7 +26,6 @@ MAX_ACTIONS = 3
 class Decision(BaseModel):
     actions: list[RobotAction]
     reason: str
-    speech: str
 
 
 class DecisionMaker:
@@ -34,24 +33,7 @@ class DecisionMaker:
         self.client = OpenAI(api_key=api_key)
         self.model = model
 
-    def choose_action(
-        self,
-        situation: str,
-        temperature: float | None = None,
-        humidity: float | None = None,
-    ) -> Decision:
-        user_content = (
-            "Situasjonsbeskrivelse fra robotens kamera:\n\n"
-            f"{situation}"
-        )
-
-        if temperature is not None and humidity is not None:
-            user_content += (
-                "\n\nSensordata målt av roboten idet den ble berørt:\n"
-                f"Temperatur: {temperature:.1f} °C\n"
-                f"Fuktighet: {humidity:.1f} %"
-            )
-
+    def choose_action(self, situation: str) -> Decision:
         response = self.client.responses.parse(
             model=self.model,
             input=[
@@ -81,20 +63,16 @@ class DecisionMaker:
                         "også inkludere shrug (rist på hodet / trekk på "
                         "skuldrene) for å vise at roboten er usikker, f.eks. "
                         "stop, wink. "
-                        "'reason' skal være maks én kort setning som forklarer "
-                        "HVORFOR du valgte handlingene (teknisk begrunnelse). "
-                        "'speech' er det roboten faktisk skal SI høyt til folk "
-                        "rundt seg, skrevet med robotens lekne personlighet, "
-                        "maks én kort setning. Hvis sensordata for temperatur og "
-                        "fuktighet er tilgjengelig i brukermeldingen, MÅ du "
-                        "eksplisitt nevne den faktiske temperatur- og/eller "
-                        "fuktighetsverdien i 'speech' (ikke bare i 'reason'), "
-                        "f.eks. \"Oi, X grader og Y% fuktighet, det er jo helt herlig!\"."
+                        "'reason' skal være maks én kort setning, skrevet med "
+                        "robotens personlighet."
                     ),
                 },
                 {
                     "role": "user",
-                    "content": user_content,
+                    "content": (
+                        "Situasjonsbeskrivelse fra robotens kamera:\n\n"
+                        f"{situation}"
+                    ),
                 },
             ],
             text_format=Decision,
