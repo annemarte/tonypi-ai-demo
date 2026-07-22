@@ -75,10 +75,6 @@ def run_once(temperature: float | None = None, humidity: float | None = None) ->
     decision = decision_maker.choose_action(situation)
     print(f"   Handlinger: {', '.join(decision.actions)}")
     print(f"   Begrunnelse: {decision.reason}")
-    print(f"   Roboten sier: {decision.speech}")
-
-    print("\n4b. Roboten sier hva den tenker ...")
-    speaker.say(decision.speech)
 
     print("\n5. TonyPi utfører handling(er) ...")
     robot.execute_all(decision.actions)

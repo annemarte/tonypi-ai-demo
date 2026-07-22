@@ -39,11 +39,13 @@ class VisionAnalyzer:
         )
 
         if temperature is not None and humidity is not None:
+            temperature_rounded = round(temperature)
+            humidity_rounded = round(humidity)
             prompt_text += (
-                f" Du målte akkurat temperaturen ({temperature:.1f} °C) og "
-                f"fuktigheten ({humidity:.1f} %) idet du ble berørt, og du MÅ "
+                f" Du målte akkurat temperaturen ({temperature_rounded} °C) og "
+                f"fuktigheten ({humidity_rounded} %) idet du ble berørt, og du MÅ "
                 "nevne disse faktiske verdiene i beskrivelsen, f.eks. "
-                f"\"Oi, {temperature:.1f} grader og {humidity:.1f}% fuktighet!\"."
+                f"\"Oi, {temperature_rounded} grader og {humidity_rounded}% fuktighet!\"."
             )
 
         response = self.client.responses.create(
