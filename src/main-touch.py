@@ -1,4 +1,5 @@
 import importlib
+import threading
 from pathlib import Path
 
 from robot.speech import Speaker
@@ -13,6 +14,28 @@ TOUCH_SOUND_PATH = PROJECT_ROOT / "audio" / "heisann.wav"
 
 HUMIDITY_CHANGE_THRESHOLD = 2.0
 HUMIDITY_ALERT_MESSAGE = "slutt å pust på meg"
+HUMIDITY_CHECK_INTERVAL_SECONDS = 2.0
+
+
+def monitor_humidity(speaker: Speaker, stop_event: threading.Event) -> None:
+    """Kjører i egen tråd og overvåker fuktighetsendringer kontinuerlig."""
+    previous_humidity = None
+
+    while not stop_event.is_set():
+        try:
+            _, humidity = read_temperature_humidity()
+
+            if previous_humidity is not None and abs(humidity - previous_humidity) > HUMIDITY_CHANGE_THRESHOLD:
+                print(
+                    f"\n   Fuktighetsendring på {abs(humidity - previous_humidity):.1f} % oppdaget!"
+                )
+                speaker.say(HUMIDITY_ALERT_MESSAGE)
+
+            previous_humidity = humidity
+        except Exception as error:
+            print(f"\nKunne ikke lese fuktighet i overvåkingstråden: {error}")
+
+        stop_event.wait(HUMIDITY_CHECK_INTERVAL_SECONDS)
 
 
 def main() -> None:
@@ -26,36 +49,37 @@ def main() -> None:
         dry_run=config["dry_run"],
     )
 
-    previous_humidity = None
+    stop_event = threading.Event()
+    humidity_thread = threading.Thread(
+        target=monitor_humidity,
+        args=(speaker, stop_event),
+        daemon=True,
+    )
+    humidity_thread.start()
 
-    with TouchSensor() as touch_sensor:
-        while True:
-            touch_sensor.wait_for_touch()
-            print("\nTouch registrert!")
+    try:
+        with TouchSensor() as touch_sensor:
+            while True:
+                touch_sensor.wait_for_touch()
+                print("\nTouch registrert!")
 
-            speaker.play_file(TOUCH_SOUND_PATH)
+                speaker.play_file(TOUCH_SOUND_PATH)
 
-            try:
-                temperature, humidity = read_temperature_humidity()
-                print(f"   Temperatur: {temperature:.1f} C, Fuktighet: {humidity:.1f} %")
+                try:
+                    temperature, humidity = read_temperature_humidity()
+                    print(f"   Temperatur: {temperature:.1f} C, Fuktighet: {humidity:.1f} %")
+                except Exception as error:
+                    print(f"\nKunne ikke lese temperatur/fuktighet: {error}")
+                    temperature, humidity = None, None
 
-                if previous_humidity is not None and abs(humidity - previous_humidity) > HUMIDITY_CHANGE_THRESHOLD:
-                    print(
-                        f"   Fuktighetsendring på {abs(humidity - previous_humidity):.1f} % oppdaget!"
-                    )
-                    speaker.say(HUMIDITY_ALERT_MESSAGE)
-
-                previous_humidity = humidity
-            except Exception as error:
-                print(f"\nKunne ikke lese temperatur/fuktighet: {error}")
-                temperature, humidity = None, None
-
-            try:
-                main_vision.run_once(temperature=temperature, humidity=humidity)
-            except KeyboardInterrupt:
-                raise
-            except Exception as error:
-                print(f"\nDemoen feilet: {error}")
+                try:
+                    main_vision.run_once(temperature=temperature, humidity=humidity)
+                except KeyboardInterrupt:
+                    raise
+                except Exception as error:
+                    print(f"\nDemoen feilet: {error}")
+    finally:
+        stop_event.set()
 
 
 if __name__ == "__main__":
