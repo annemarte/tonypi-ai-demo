@@ -77,8 +77,10 @@ class DecisionMaker:
                         "også inkludere shrug (rist på hodet / trekk på "
                         "skuldrene) for å vise at roboten er usikker, f.eks. "
                         "stop, wink. Hvis sensordata for temperatur og "
-                        "fuktighet er tilgjengelig, kan du kommentere "
-                        "verdiene i 'reason' på en lekende måte. "
+                        "fuktighet er tilgjengelig i brukermeldingen, MÅ du "
+                        "eksplisitt nevne den faktiske temperatur- og/eller "
+                        "fuktighetsverdien i 'reason', f.eks. \"Oi, X grader "
+                        "og Y% fuktighet, det er jo helt herlig!\". "
                         "'reason' skal være maks én kort setning, skrevet med "
                         "robotens personlighet."
                     ),
