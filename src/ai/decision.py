@@ -26,6 +26,7 @@ MAX_ACTIONS = 3
 class Decision(BaseModel):
     actions: list[RobotAction]
     reason: str
+    speech: str
 
 
 class DecisionMaker:
@@ -79,13 +80,16 @@ class DecisionMaker:
                         "Ved usikkerhet skal listen inneholde stop, og bør "
                         "også inkludere shrug (rist på hodet / trekk på "
                         "skuldrene) for å vise at roboten er usikker, f.eks. "
-                        "stop, wink. Hvis sensordata for temperatur og "
+                        "stop, wink. "
+                        "'reason' skal være maks én kort setning som forklarer "
+                        "HVORFOR du valgte handlingene (teknisk begrunnelse). "
+                        "'speech' er det roboten faktisk skal SI høyt til folk "
+                        "rundt seg, skrevet med robotens lekne personlighet, "
+                        "maks én kort setning. Hvis sensordata for temperatur og "
                         "fuktighet er tilgjengelig i brukermeldingen, MÅ du "
                         "eksplisitt nevne den faktiske temperatur- og/eller "
-                        "fuktighetsverdien i 'reason', f.eks. \"Oi, X grader "
-                        "og Y% fuktighet, det er jo helt herlig!\". "
-                        "'reason' skal være maks én kort setning, skrevet med "
-                        "robotens personlighet."
+                        "fuktighetsverdien i 'speech' (ikke bare i 'reason'), "
+                        "f.eks. \"Oi, X grader og Y% fuktighet, det er jo helt herlig!\"."
                     ),
                 },
                 {
