@@ -31,6 +31,9 @@ class VisionAnalyzer:
             "Nevn kort hva du ser og "
             "om det virker trygt å bevege seg fremover. "
             "Ikke velg en robothandling ennå. Vær veldig kort og konsis. Gjerne litt hipp og kul Bærum-slang. "
+            "Dersom et ansikt eller en person fyller store deler av bildet, eller "
+            "virker svært nær/rett oppi kameraet, skal du ALLTID si tydelig at "
+            "det IKKE er trygt å gå framover akkurat nå. "
             "Dersom det er en person synlig i bildet, skal du ALLTID legge til én "
             "ekstra kort setning med et hyggelig kompliment til personen."
         )
