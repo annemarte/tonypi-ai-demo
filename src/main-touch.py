@@ -18,7 +18,11 @@ HUMIDITY_DECREASE_MESSAGE = "trallalala"
 HUMIDITY_CHECK_INTERVAL_SECONDS = 2.0
 
 
-def monitor_humidity(speaker: Speaker, stop_event: threading.Event) -> None:
+def monitor_humidity(
+    speaker: Speaker,
+    stop_event: threading.Event,
+    action_in_progress: threading.Event,
+) -> None:
     """Kjører i egen tråd og overvåker fuktighetsendringer kontinuerlig."""
     previous_humidity = None
 
@@ -33,8 +37,14 @@ def monitor_humidity(speaker: Speaker, stop_event: threading.Event) -> None:
                     print(f"\n   Fuktighetsøkning på {change:.1f} % oppdaget!")
                     speaker.say(HUMIDITY_INCREASE_MESSAGE)
                 elif change < -HUMIDITY_CHANGE_THRESHOLD:
-                    print(f"\n   Fuktighetsnedgang på {abs(change):.1f} % oppdaget!")
-                    speaker.say(HUMIDITY_DECREASE_MESSAGE)
+                    if action_in_progress.is_set():
+                        print(
+                            f"\n   Fuktighetsnedgang på {abs(change):.1f} % oppdaget, "
+                            "men action-sekvens pågår, hopper over trallalala."
+                        )
+                    else:
+                        print(f"\n   Fuktighetsnedgang på {abs(change):.1f} % oppdaget!")
+                        speaker.say(HUMIDITY_DECREASE_MESSAGE)
 
             previous_humidity = humidity
         except Exception as error:
@@ -55,9 +65,10 @@ def main() -> None:
     )
 
     stop_event = threading.Event()
+    action_in_progress = threading.Event()
     humidity_thread = threading.Thread(
         target=monitor_humidity,
-        args=(speaker, stop_event),
+        args=(speaker, stop_event, action_in_progress),
         daemon=True,
     )
     humidity_thread.start()
@@ -77,12 +88,15 @@ def main() -> None:
                     print(f"\nKunne ikke lese temperatur/fuktighet: {error}")
                     temperature, humidity = None, None
 
+                action_in_progress.set()
                 try:
                     main_vision.run_once(temperature=temperature, humidity=humidity)
                 except KeyboardInterrupt:
                     raise
                 except Exception as error:
                     print(f"\nDemoen feilet: {error}")
+                finally:
+                    action_in_progress.clear()
     finally:
         stop_event.set()
 
