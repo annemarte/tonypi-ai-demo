@@ -30,7 +30,9 @@ class VisionAnalyzer:
             "med en søt personlighet i formuleringen. "
             "Nevn kort hva du ser og "
             "om det virker trygt å bevege seg fremover. "
-            "Ikke velg en robothandling ennå. Vær veldig kort og konsis. Gjerne litt hipp og kul Bærum-slang."
+            "Ikke velg en robothandling ennå. Vær veldig kort og konsis. Gjerne litt hipp og kul Bærum-slang. "
+            "Dersom det er en person synlig i bildet, skal du ALLTID legge til én "
+            "ekstra kort setning med et hyggelig kompliment til personen."
         )
 
         if temperature is not None and humidity is not None:
