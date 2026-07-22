@@ -13,7 +13,8 @@ TOUCH_SOUND_PATH = PROJECT_ROOT / "audio" / "heisann.wav"
 
 
 HUMIDITY_CHANGE_THRESHOLD = 2.0
-HUMIDITY_ALERT_MESSAGE = "slutt å pust på meg"
+HUMIDITY_INCREASE_MESSAGE = "slutt å pust på meg"
+HUMIDITY_DECREASE_MESSAGE = "trallalala"
 HUMIDITY_CHECK_INTERVAL_SECONDS = 2.0
 
 
@@ -25,11 +26,15 @@ def monitor_humidity(speaker: Speaker, stop_event: threading.Event) -> None:
         try:
             _, humidity = read_temperature_humidity()
 
-            if previous_humidity is not None and abs(humidity - previous_humidity) > HUMIDITY_CHANGE_THRESHOLD:
-                print(
-                    f"\n   Fuktighetsendring på {abs(humidity - previous_humidity):.1f} % oppdaget!"
-                )
-                speaker.say(HUMIDITY_ALERT_MESSAGE)
+            if previous_humidity is not None:
+                change = humidity - previous_humidity
+
+                if change > HUMIDITY_CHANGE_THRESHOLD:
+                    print(f"\n   Fuktighetsøkning på {change:.1f} % oppdaget!")
+                    speaker.say(HUMIDITY_INCREASE_MESSAGE)
+                elif change < -HUMIDITY_CHANGE_THRESHOLD:
+                    print(f"\n   Fuktighetsnedgang på {abs(change):.1f} % oppdaget!")
+                    speaker.say(HUMIDITY_DECREASE_MESSAGE)
 
             previous_humidity = humidity
         except Exception as error:
